@@ -536,7 +536,7 @@ function Lightbox({
 
 /* ═══════════════════════════════════════════
    ROW 1 LEFT (col-span-8): SOUNDTRACK CARD
-   宽卡片 — 光盘.png 点击播放/暂停 + 硬核打字机文本
+   宽卡片 — vinyl.png 点击播放/暂停 + 硬核打字机文本
    ═══════════════════════════════════════════ */
 function SoundtrackCard({
   isPlaying,
@@ -583,7 +583,7 @@ function SoundtrackCard({
               onClick={onTogglePlay}
             >
               <img
-                src="/光盘.png"
+                src="/vinyl.png"
                 alt="Vinyl Record — click to play"
                 className="w-full h-full object-contain cursor-pointer"
                 title={isPlaying ? "Pause" : "Play"}
@@ -591,7 +591,7 @@ function SoundtrackCard({
             </div>
             <div className="cd-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-parchment/30 shadow-md pointer-events-none">
               <img
-                src="/专辑封面.jpg"
+                src="/cover.jpg"
                 alt="Album Cover"
                 className="w-full h-full object-cover"
               />
