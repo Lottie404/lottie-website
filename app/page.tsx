@@ -574,22 +574,25 @@ function SoundtrackCard({
 
       {/* Main content: left CD + right text */}
       <div className="flex flex-col md:flex-row gap-7 md:gap-9 relative z-10">
-        {/* Left: CD Player — click to play/pause */}
+        {/* Left: CD Player — click COVER to play/pause */}
         <div className="flex-shrink-0 flex flex-col items-center gap-3">
           <div className="cd-player">
             <div
               className="cd-disc cd-disc--spinning"
               style={{ animationPlayState: isPlaying ? "running" : "paused" }}
-              onClick={onTogglePlay}
             >
               <img
                 src="/vinyl.png"
-                alt="Vinyl Record — click to play"
-                className="w-full h-full object-contain cursor-pointer"
-                title={isPlaying ? "Pause" : "Play"}
+                alt="Vinyl Record"
+                className="w-full h-full object-contain"
               />
             </div>
-            <div className="cd-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-parchment/30 shadow-md pointer-events-none">
+            <div
+              className="cd-cover cd-cover--spinning absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-parchment/30 shadow-md cursor-pointer"
+              style={{ animationPlayState: isPlaying ? "running" : "paused" }}
+              onClick={onTogglePlay}
+              title={isPlaying ? "Pause" : "Play"}
+            >
               <img
                 src="/cover.jpg"
                 alt="Album Cover"
@@ -600,8 +603,8 @@ function SoundtrackCard({
           <p className="font-[family-name:var(--font-caveat)] text-sm text-ink-light text-center -mt-1">
             Chateau — Angus &amp; Julia Stone
           </p>
-          <p className="text-[0.6rem] text-amber-dark/50 font-[family-name:var(--font-caveat)] text-center -mt-2">
-            click disc to {isPlaying ? "pause" : "play"}
+          <p className="text-[0.95rem] text-amber-dark/70 font-[family-name:var(--font-caveat)] text-center -mt-2 tracking-wide">
+            点击cover有惊喜！
           </p>
         </div>
 
@@ -612,9 +615,13 @@ function SoundtrackCard({
               <span className="text-amber-dark font-semibold">&gt; 网易云音乐 Lv.9 · 耳机听歌量 1w+</span>
             </p>
             <p className="mb-2 opacity-80">
-              从深夜英伦摇滚到黎明极简电音——音乐是我在{" "}
-              <span className="ink-accent">心理学实验数据</span>与{" "}
-              <span className="ink-accent--amber">React 组件树</span>之间的缝合线。
+              从深夜英伦摇滚到凌晨的纯音乐——音乐一直是我生活里的情绪缓冲带。
+            </p>
+            <p className="mb-2 opacity-75 text-[0.68rem]">
+              写东西的时候会循环听轻音乐，走路的时候又会突然切到英伦摇滚。有时候只是戴着耳机发呆，也会因为某一句歌词或者某个鼓点突然心情变好。
+            </p>
+            <p className="mb-2 opacity-70 text-[0.66rem]">
+              很多很难描述的情绪，最后都会被音乐轻轻接住。
             </p>
             <hr className="thread-divider my-3" />
             <p className="text-[0.68rem] text-ink-light/70 italic leading-relaxed">

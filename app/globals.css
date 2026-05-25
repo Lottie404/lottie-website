@@ -941,9 +941,15 @@ body {
     80%  { transform: scale(0.98) rotate(-0.5deg); }
     100% { transform: scale(1) rotate(0deg); }
   }
+  @keyframes cdCoverSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
   .cd-cover {
-    pointer-events: none;
     z-index: 2;
+  }
+  .cd-cover--spinning {
+    animation: cdCoverSpin 8s linear infinite;
   }
 
   /* Lyrics Marquee */
