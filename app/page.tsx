@@ -1020,6 +1020,8 @@ function ChatAgent() {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastSendTime = useRef<number>(0);
+  const messageCount = useRef<number>(0);
 
   const typeMessage = useCallback((text: string, callback?: () => void) => {
     setTyping(true);
@@ -1082,22 +1084,45 @@ function ChatAgent() {
   const handleQuestion = useCallback(
     (q: string) => {
       if (typing || loading) return;
+      if (messageCount.current >= 20) {
+        typeMessage("You've reached the 20-message limit for this session. Feel free to reach out via email instead.");
+        return;
+      }
+      const now = Date.now();
+      if (now - lastSendTime.current < 5000) {
+        typeMessage("Please wait a few seconds before sending another message.");
+        return;
+      }
+      lastSendTime.current = now;
+      messageCount.current += 1;
       const updated = [...messages, { type: "user" as const, text: q }];
       setMessages(updated);
       callAPI(updated);
     },
-    [messages, typing, loading, callAPI],
+    [messages, typing, loading, callAPI, typeMessage],
   );
 
   /* ── free-text send ── */
   const handleSend = useCallback(() => {
     const text = inputValue.trim();
     if (!text || typing || loading) return;
+    if (messageCount.current >= 20) {
+      typeMessage("You've reached the 20-message limit for this session. Feel free to reach out via email instead.");
+      setInputValue("");
+      return;
+    }
+    const now = Date.now();
+    if (now - lastSendTime.current < 5000) {
+      typeMessage("Please wait a few seconds before sending another message.");
+      return;
+    }
+    lastSendTime.current = now;
+    messageCount.current += 1;
     const updated = [...messages, { type: "user" as const, text }];
     setMessages(updated);
     setInputValue("");
     callAPI(updated);
-  }, [inputValue, messages, typing, loading, callAPI]);
+  }, [inputValue, messages, typing, loading, callAPI, typeMessage]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

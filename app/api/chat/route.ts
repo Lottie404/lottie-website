@@ -1,5 +1,35 @@
+/* ── in-memory rate limiter (per-IP, 5s cooldown, 20 req/session) ── */
+const rateMap = new Map<string, { count: number; lastTime: number }>();
+const RATE_WINDOW_MS = 5000;
+const RATE_MAX = 20;
+
 export async function POST(req: Request) {
   const { messages } = await req.json();
+
+  /* rate-limit check */
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || req.headers.get("x-real-ip")
+    || "unknown";
+  const now = Date.now();
+  const entry = rateMap.get(ip);
+  if (entry) {
+    if (entry.count >= RATE_MAX) {
+      return Response.json(
+        { reply: "You've reached the message limit for this session. Feel free to reach out via email: zhanglnxn@163.com." },
+        { status: 200 },
+      );
+    }
+    if (now - entry.lastTime < RATE_WINDOW_MS) {
+      return Response.json(
+        { reply: "Please wait a few seconds before sending another message." },
+        { status: 200 },
+      );
+    }
+    entry.lastTime = now;
+    entry.count += 1;
+  } else {
+    rateMap.set(ip, { count: 1, lastTime: now });
+  }
 
   const apiKey = process.env.OPENAI_API_KEY;
   const rawBase = (process.env.OPENAI_BASE_URL || "https://api.deepseek.com").replace(/\/+$/, "");
