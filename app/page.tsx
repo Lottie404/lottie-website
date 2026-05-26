@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import Image from "next/image";
 import WanderingThread from "./components/WanderingThread";
 
 /* ── lyric rotation pool ── */
@@ -375,16 +376,13 @@ function CenterModalDossier({
             <div className="dossier-modal__images">
               {d.images.map((img, i) =>
                 img.isLogo ? (
-                  <div key={i} className="dossier-modal__img" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "#f9f6f0", minHeight: 80, maxWidth: 120 }}>
-                    <img src={img.src} alt={img.alt} style={{ maxWidth: "80%", maxHeight: "60%", objectFit: "contain", opacity: 0.7 }} />
+                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "#f9f6f0", minHeight: 80, maxWidth: 120, position: "relative" }}>
+                    <Image src={img.src} alt={img.alt} fill sizes="120px" unoptimized style={{ objectFit: "contain", opacity: 0.7 }} />
                   </div>
                 ) : (
-                  <img
-                    key={i}
-                    src={img.src}
-                    alt={img.alt}
-                    className="dossier-modal__img"
-                  />
+                  <div key={i} className="dossier-modal__img" style={{ position: "relative", aspectRatio: "4/3" }}>
+                    <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="180px" unoptimized />
+                  </div>
                 ),
               )}
             </div>
@@ -478,11 +476,15 @@ function GalleryConsole({
           onClick={() => onPhotoClick(heroPhoto, currentCaption)}
         >
           <div className="gallery__hero-frame">
-            <img
-              src={heroPhoto}
-              alt={`${albums[activeAlbum]?.label} hero`}
-              className="gallery__hero-img"
-            />
+            <div style={{ position: "relative", width: "100%", aspectRatio: "4/3" }}>
+              <Image
+                src={heroPhoto}
+                alt={`${albums[activeAlbum]?.label} hero`}
+                fill
+                className="gallery__hero-img object-cover"
+                sizes="(max-width: 768px) 100vw, 65vw"
+              />
+            </div>
           </div>
           <p className="gallery__hero-caption">{currentCaption}</p>
         </div>
@@ -491,14 +493,16 @@ function GalleryConsole({
           {thumbs.map((photo, i) => {
             const realIndex = photos.indexOf(photo);
             return (
-              <img
-                key={`${activeAlbum}-${realIndex}`}
-                src={photo}
-                alt={`Thumbnail ${realIndex + 1}`}
-                className="gallery__thumb"
-                onClick={() => handleThumbClick(realIndex)}
-                loading="lazy"
-              />
+              <div key={`${activeAlbum}-${realIndex}`} style={{ position: "relative", width: "100%", aspectRatio: "4/3" }}>
+                <Image
+                  src={photo}
+                  alt={`Thumbnail ${realIndex + 1}`}
+                  fill
+                  className="gallery__thumb object-cover"
+                  sizes="(max-width: 768px) 30vw, 10vw"
+                  onClick={() => handleThumbClick(realIndex)}
+                />
+              </div>
             );
           })}
         </div>
@@ -527,7 +531,15 @@ function Lightbox({
     >
       <div className="lightbox__polaroid" onClick={(e) => e.stopPropagation()}>
         <button className="lightbox__close" onClick={onClose}>— close —</button>
-        <img src={photo} alt="Gallery" />
+        <Image
+          src={photo}
+          alt="Gallery"
+          width={800}
+          height={600}
+          className="object-contain"
+          sizes="70vw"
+          style={{ maxWidth: "70vw", maxHeight: "55vh", filter: "sepia(0.2) grayscale(0.08) contrast(1.08)" }}
+        />
         <p className="lightbox__caption">{caption}</p>
       </div>
     </div>
@@ -578,13 +590,15 @@ function SoundtrackCard({
         <div className="flex-shrink-0 flex flex-col items-center gap-3">
           <div className="cd-player">
             <div
-              className="cd-disc cd-disc--spinning"
+              className="cd-disc cd-disc--spinning relative"
               style={{ animationPlayState: isPlaying ? "running" : "paused" }}
             >
-              <img
+              <Image
                 src="/vinyl.png"
                 alt="Vinyl Record"
-                className="w-full h-full object-contain"
+                fill
+                className="object-contain"
+                sizes="200px"
               />
             </div>
             <div
@@ -593,10 +607,12 @@ function SoundtrackCard({
               onClick={onTogglePlay}
               title={isPlaying ? "Pause" : "Play"}
             >
-              <img
+              <Image
                 src="/cover.jpg"
                 alt="Album Cover"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="96px"
               />
             </div>
           </div>
@@ -760,9 +776,12 @@ function LivehouseTicket() {
             className="livehouse-ticket-v__photo"
             onClick={() => setHeroI((heroI + 1) % PHOTOS.length)}
           >
-            <img
+            <Image
               src={PHOTOS[heroI]}
               alt={`Livehouse ${heroI + 1}`}
+              fill
+              className="object-cover"
+              sizes="200px"
             />
             <span className="livehouse-ticket-v__hint">
               {heroI + 1}/{PHOTOS.length}
@@ -826,12 +845,13 @@ function BadmintonStack() {
       {/* Photo fan — 3 photos stacked */}
       <div className="badge-fan">
         {PHOTOS.map((photo, i) => (
-          <img
+          <Image
             key={photo}
             src={photo}
             alt={`Badminton ${i + 1}`}
+            width={135}
+            height={175}
             className={`badge-fan__photo badge-fan__photo--${i}`}
-            loading="lazy"
           />
         ))}
       </div>
@@ -870,9 +890,12 @@ function SkiPass() {
         className="skipass__photo"
         onClick={() => setHeroI((heroI + 1) % PHOTOS.length)}
       >
-        <img
+        <Image
           src={PHOTOS[heroI]}
           alt={`Ski ${heroI + 1}`}
+          fill
+          className="object-cover"
+          sizes="240px"
         />
         <span className="skipass__hint">{heroI + 1}/{PHOTOS.length}</span>
       </div>
@@ -1617,8 +1640,8 @@ export default function Home() {
             className="polaroid md:col-span-3 lg:col-span-4 lg:col-start-9 rotate-scatter-2"
             style={{ height: "fit-content" }}
           >
-            <div className="vintage-photo__frame aspect-[4/5] flex items-center justify-center">
-              <img src="/avatar.jpg" alt="Lottie" className="vintage-photo w-full h-full" />
+            <div className="vintage-photo__frame aspect-[4/5] flex items-center justify-center relative">
+              <Image src="/avatar.jpg" alt="Lottie" fill className="vintage-photo object-cover" sizes="(max-width: 768px) 200px, 280px" />
             </div>
             <p className="polaroid__caption">
               Lottie · 2026
@@ -2015,10 +2038,13 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center w-full">
               <div className="bg-white p-4 pb-8 shadow-xl border border-neutral-200 rounded-sm transform rotate-[-1.5deg] w-full max-w-[280px]">
                 <div className="w-full aspect-[3/4] bg-neutral-100 overflow-hidden relative border border-neutral-100">
-                  <img
+                  <Image
                     src={`/moments/${activeTarot.folder}/1.jpg`}
                     alt={activeTarot.title}
-                    className="w-full height-full object-cover select-none"
+                    fill
+                    className="object-cover select-none"
+                    sizes="280px"
+                    unoptimized
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
                         "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' fill='%23f5f5f5'/%3E%3C/svg%3E";
