@@ -1415,7 +1415,7 @@ export default function Home() {
     return () => obs.disconnect();
   }, [birdsFlying]);
 
-  /* ── HTML5 Audio player for /song.mp3 ── */
+  /* ── HTML5 Audio player for /song_min.mp3 ── */
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [lyricText, setLyricText] = useState("");
@@ -1530,7 +1530,7 @@ export default function Home() {
       <div className="plant-backdrop" />
 
       {/* ═══════════ AUDIO PLAYER ═══════════ */}
-      <audio ref={audioRef} src="/song.mp3" preload="auto" loop />
+      <audio ref={audioRef} src="/song_min.mp3" preload="auto" loop />
 
       {/* ═══════════ BOTANICAL DECALS (swaying) ═══════════ */}
       <div className="absolute top-6 left-2 hidden lg:block pointer-events-none z-0">
